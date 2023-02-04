@@ -4,20 +4,39 @@ using UnityEngine;
 
 public class HqManager : MonoBehaviour
 {
-    public int health = 30; //hide later
+    //populate in editor
+    public GameObject playerTower1;
+    public GameObject playerTower2;
+    public int health = 100;
 
     private SpawnManager startNode;
+    private TowerPlacement towerPlaceScript;
 
     // Start is called before the first frame update
     void Start()
     {
+        //summon the place marker here?
         startNode = GameObject.Find("Start Node").GetComponent<SpawnManager>();
+        towerPlaceScript = GameObject.Find("Placement Spot").GetComponent<TowerPlacement>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        //should i stick the tower setting functionalities and game menu functionalities here? make the system menus their own script
+        //stick game menu functionalities here? make the system menus their own script
+
+        //add in the monetary value check later
+        if (Input.GetKeyDown(KeyCode.A) == true && towerPlaceScript.placed == true)
+        {
+            towerPlaceScript.towerToPlace = playerTower1;
+            StartCoroutine(towerPlaceScript.Placing());
+        }
+
+        if (Input.GetKeyDown(KeyCode.S) == true && towerPlaceScript.placed == true)
+        {
+            towerPlaceScript.towerToPlace = playerTower2;
+            StartCoroutine(towerPlaceScript.Placing());
+        }
     }
 
     private void OnTriggerEnter(Collider other)

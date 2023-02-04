@@ -6,6 +6,10 @@ TagManager:
   tags:
   - Enemy
   - Boss
+  - Path
+  - HQ
+  - Field
+  - Tower
   layers:
   - Default
   - TransparentFX

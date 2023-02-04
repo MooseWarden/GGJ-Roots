@@ -5,7 +5,7 @@ using UnityEngine;
 public class EnemyScript : MonoBehaviour
 {
     //set in inspector
-    public int speed;
+    public float speed;
     public int health; //towers subtract 1 from here each hit
 
     [HideInInspector] public NodePointers startNodeNodeScript;

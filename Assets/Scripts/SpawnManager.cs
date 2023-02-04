@@ -8,7 +8,7 @@ public class SpawnManager : MonoBehaviour
     public GameObject[] enemyPrefabs;
     public GameObject bossPrefab;
 
-    [HideInInspector] public int enemyCount = 0;
+    [HideInInspector] public int enemyCount = 0; //keep track of how many enemies, not bosses, spawn in, and decrease this value by 1 when an enemy is killed from an outside script
     [HideInInspector] public int waveNumber = 1;
     [HideInInspector] public bool stopRunning = false; //if need to pause too? pause can lift from rwi
 
@@ -70,7 +70,7 @@ public class SpawnManager : MonoBehaviour
     /// <returns></returns>
     IEnumerator WaveIntroAnim()
     {
-        //play the anim here
+        //play the anim here of what wave number this is
         Debug.Log("intro anim");
         yield return new WaitForSeconds(1);
     }
@@ -85,9 +85,6 @@ public class SpawnManager : MonoBehaviour
         //replace this with the intro anim, whose number changes based on the wave. maybe have that coroutine call this one. or have the intro anim here. or first call the intro anim, then the spawner
         yield return new WaitForSeconds(2);
 
-        //randomize the seconds they wait for, maybe between 0.5 to 2 seconds? nothing too big or small
-        //play the anim of wave num before resuming, maybe need a start down coroutine
-
         //make this into a specific number later, maybe some value specific to a sport. when beat boss you win
         if (numToSpawn % 5 == 0)
         {
@@ -96,14 +93,13 @@ public class SpawnManager : MonoBehaviour
             yield return new WaitForSeconds(1);
         }
 
-        //control the time spawn, have the timer be randomized for the pauses
         for (int i = 0; i < numToSpawn; i++)
         {
             int randEnemyIndex = Random.Range(0, enemyPrefabs.Length);
             GameObject instantEnemy = Instantiate(enemyPrefabs[randEnemyIndex], SpawnPosition(), enemyPrefabs[randEnemyIndex].transform.rotation); //maybe play spawn anim like the ball from rwi
-            instantEnemy.SetActive(true);//temp until i make prefabs of the enemies
-            enemyCount++; //keep track of how many enemies spawned, and decrease this value by 1 when an enemy is killed from an outside script
-            yield return new WaitForSeconds(1);
+            //use instantEnemy to activate the spawn anim
+            enemyCount++; 
+            yield return new WaitForSeconds(Random.Range(0.5f, 1.5f));
         }
 
         yield return new WaitForSeconds(2);
