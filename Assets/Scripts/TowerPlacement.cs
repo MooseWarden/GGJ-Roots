@@ -134,6 +134,14 @@ public class TowerPlacement : MonoBehaviour
     }
 
     /// <summary>
+    /// Initiate the tower placing coroutine.
+    /// </summary>
+    public void InitPlacing()
+    {
+        StartCoroutine(Placing());
+    }
+
+    /// <summary>
     /// Activate placing mode.
     /// </summary>
     public IEnumerator Placing()
@@ -161,6 +169,16 @@ public class TowerPlacement : MonoBehaviour
             }
             yield return null;
         }
+
+        StopAllCoroutines();
+    }
+
+    /// <summary>
+    /// Initiate the tower demolish coroutine.
+    /// </summary>
+    public void InitDemolish()
+    {
+        StartCoroutine(Demolish());
     }
 
     /// <summary>
@@ -194,5 +212,7 @@ public class TowerPlacement : MonoBehaviour
             }
             yield return null;
         }
+
+        StopAllCoroutines();
     }
 }

@@ -47,18 +47,18 @@ public class HqManager : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.A) == true && towerPlaceScript.placed == true && cash >= playerTowerAttack.GetComponent<TowerAttack>().cost && paused == false)
         {
             towerPlaceScript.towerToPlace = playerTowerAttack;
-            StartCoroutine(towerPlaceScript.Placing());
+            towerPlaceScript.InitPlacing();
         }
 
         if (Input.GetKeyDown(KeyCode.S) == true && towerPlaceScript.placed == true && cash >= playerTowerSlow.GetComponent<TowerSlow>().cost && paused == false)
         {
             towerPlaceScript.towerToPlace = playerTowerSlow;
-            StartCoroutine(towerPlaceScript.Placing());
+            towerPlaceScript.InitPlacing();
         }
 
         if (Input.GetKeyDown(KeyCode.D) == true && towerPlaceScript.placed == true && paused == false)
         {
-            StartCoroutine(towerPlaceScript.Demolish());
+            towerPlaceScript.InitDemolish();
         }
     }
 

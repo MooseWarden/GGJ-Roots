@@ -80,6 +80,7 @@ QualitySettings:
     excludedTargetPlatforms:
     - Standalone
     - Server
+    - WebGL
   - serializedVersion: 2
     name: Medium
     pixelLightCount: 1
@@ -118,6 +119,7 @@ QualitySettings:
     excludedTargetPlatforms:
     - Server
     - Standalone
+    - WebGL
   - serializedVersion: 2
     name: High
     pixelLightCount: 2
@@ -156,6 +158,7 @@ QualitySettings:
     excludedTargetPlatforms:
     - Standalone
     - Server
+    - WebGL
   - serializedVersion: 2
     name: Very High
     pixelLightCount: 3
@@ -194,6 +197,7 @@ QualitySettings:
     excludedTargetPlatforms:
     - Server
     - Standalone
+    - WebGL
   - serializedVersion: 2
     name: Ultra
     pixelLightCount: 4
@@ -232,6 +236,7 @@ QualitySettings:
     excludedTargetPlatforms:
     - Standalone
     - Server
+    - WebGL
   m_PerPlatformDefaultQuality:
     Android: 2
     GameCoreScarlett: 5
@@ -244,7 +249,7 @@ QualitySettings:
     Server: 0
     Stadia: 5
     Standalone: 0
-    WebGL: 3
+    WebGL: 0
     Windows Store Apps: 5
     XboxOne: 5
     iPhone: 2

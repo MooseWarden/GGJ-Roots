@@ -60,6 +60,14 @@ public class EnemyScript : MonoBehaviour
     }
 
     /// <summary>
+    /// Initiate the enemy hurt coroutine.
+    /// </summary>
+    public void InitGetHurt()
+    {
+        StartCoroutine(GetHurt());
+    }
+
+    /// <summary>
     /// Damage the enemy.
     /// </summary>
     public IEnumerator GetHurt()
@@ -72,8 +80,7 @@ public class EnemyScript : MonoBehaviour
             {
                 if (gameObject != null) //The object of type 'EnemyScript' has been destroyed but you are still trying to access it. - this sometimes still happens, dunno why
                 {
-                    StopAllCoroutines();
-                    StartCoroutine(Die());
+                    Die();
                 }
                 break;
             }
@@ -90,9 +97,8 @@ public class EnemyScript : MonoBehaviour
     /// <summary>
     /// Destroy the enemy and reward the player.
     /// </summary>
-    private IEnumerator Die() //does this even need to be an enumerator
+    private void Die() //does this even need to be an enumerator
     {
-        yield return null;
         startNodeSpawnScript.enemyCount--;
         HqManager payUp = GameObject.Find("End Node").GetComponent<HqManager>();
         payUp.cash += payout;

@@ -247,5 +247,5 @@ MonoBehaviour:
   - {fileID: 6581970965560114106, guid: 0d0f3ea41524e4f458f8a36dfbd8fea5, type: 3}
   bossPrefab: {fileID: 8826885146375280733, guid: a99ce7617f9d9d24a8fb3356350a092c, type: 3}
   enemyCount: 0
-  waveNumber: 1
+  waveNumber: 0
   stopRunning: 0

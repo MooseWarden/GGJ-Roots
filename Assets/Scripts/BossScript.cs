@@ -49,6 +49,7 @@ public class BossScript : EnemyScript
 
     public override void OnDestroy()
     {
+        base.OnDestroy();
         StopCoroutine(BossAttack());
     }
 }

@@ -18,7 +18,7 @@ public class TowerAttack : TowerScript
                 if (tempEnemyScript.takeDmg == false)
                 {
                     tempEnemyScript.takeDmg = true;
-                    StartCoroutine(tempEnemyScript.GetHurt());
+                    tempEnemyScript.InitGetHurt();
                 }
                 else if (tempEnemyScript.takeDmg == true)
                 {
@@ -32,7 +32,7 @@ public class TowerAttack : TowerScript
                 if (tempBossScript.takeDmg == false)
                 {
                     tempBossScript.takeDmg = true;
-                    StartCoroutine(tempBossScript.GetHurt());
+                    tempBossScript.InitGetHurt();
                 }
                 else if (tempBossScript.takeDmg == true)
                 {
@@ -71,7 +71,7 @@ public class TowerAttack : TowerScript
 
                 //bandaid for the issue where occationally, the multiplier goes to the negatives (i think havent verified) and the enemy starts gaining health
                 //usually happens when the enemy exits a tower cluster and shortly enters another one, weird combo of slow and attack towers maybe
-                if(other.GetComponent<EnemyScript>().dmgMultiplier < 1)
+                if (other.GetComponent<EnemyScript>().dmgMultiplier < 1)
                 {
                     other.GetComponent<EnemyScript>().dmgMultiplier = 1;
                 }
