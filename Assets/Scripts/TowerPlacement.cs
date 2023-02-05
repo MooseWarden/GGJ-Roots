@@ -125,6 +125,15 @@ public class TowerPlacement : MonoBehaviour
     }
 
     /// <summary>
+    /// Set the spawn position of the tower.
+    /// </summary>
+    public Vector3 SpawnPosition()
+    {
+        Vector3 spawnPos = new(transform.position.x, 0.26f, transform.position.z);
+        return spawnPos;
+    }
+
+    /// <summary>
     /// Activate placing mode.
     /// </summary>
     public IEnumerator Placing()
@@ -139,7 +148,7 @@ public class TowerPlacement : MonoBehaviour
             //LMB for placing a tower, RMB for canceling the action
             if (Input.GetMouseButtonDown(0) == true && canDo == true) //stretch goal - need a raycast to see if the mouse is over the field, from the spot?
             {
-                GameObject instantTower = Instantiate(towerToPlace, transform.position, towerToPlace.transform.rotation); //stretch goal - use instant tower for spawn fx play
+                GameObject instantTower = Instantiate(towerToPlace, SpawnPosition(), towerToPlace.transform.rotation); //stretch goal - use instant tower for spawn fx play
                 yield return new WaitForSeconds(0.1f);
                 GetComponent<MeshRenderer>().enabled = false;
                 placed = true;

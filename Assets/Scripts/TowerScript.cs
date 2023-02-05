@@ -28,6 +28,7 @@ public class TowerScript : MonoBehaviour
     public void Charge()
     {
         finance.cash -= cost;
+        finance.cashTracker.text = "Cash Money: $" + finance.cash;
     }
 
     /// <summary>
@@ -36,5 +37,6 @@ public class TowerScript : MonoBehaviour
     public void Refund()
     {
         finance.cash += Mathf.RoundToInt(cost / 2);
+        finance.cashTracker.text = "Cash Money: $" + finance.cash;
     }
 }

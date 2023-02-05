@@ -1,6 +1,7 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
+using UnityEngine.SceneManagement;
 
 /// <summary>
 /// Manages the key systems of the game.
@@ -15,38 +16,47 @@ public class HqManager : MonoBehaviour
 
     private SpawnManager startNode;
     private TowerPlacement towerPlaceScript;
-    
-    [HideInInspector] public int cash = 100; //starting cash
+    private TextMeshProUGUI pauseButtonText;
+
+    [HideInInspector] public int cash = 100; //starting cash.
+    [HideInInspector] public bool paused;
+    [HideInInspector] public TextMeshProUGUI healthTracker;
+    [HideInInspector] public TextMeshProUGUI cashTracker;
 
     // Start is called before the first frame update
     void Start()
     {
+        paused = false;
+        pauseButtonText = GameObject.Find("PauseButton").GetComponentInChildren<TextMeshProUGUI>();
+
         GameObject instantMarker = Instantiate(spawnMarker, Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 29.9f)), spawnMarker.transform.rotation);
         startNode = GameObject.Find("Start Node").GetComponent<SpawnManager>();
         towerPlaceScript = instantMarker.GetComponent<TowerPlacement>();
+
+        healthTracker = GameObject.Find("Health Tracker").GetComponent<TextMeshProUGUI>();
+        healthTracker.text = "HQ HP: " + health;
+        cashTracker = GameObject.Find("Cash Tracker").GetComponent<TextMeshProUGUI>();
+        cashTracker.text = "Cash Money: $" + cash;
         StartCoroutine(Accrue());
     }
 
     // Update is called once per frame
     void Update()
     {
-        //stick game menu functionalities here? make the system menus their own script
-        //when pause, how do i pause all the coroutines? worst case, bandaid could be that i set their incrementing values to 0 until unpause
-
         //stretch goal - maybe have the marker show up red when try placing a tower with no money
-        if (Input.GetKeyDown(KeyCode.A) == true && towerPlaceScript.placed == true && cash >= playerTowerAttack.GetComponent<TowerAttack>().cost)
+        if (Input.GetKeyDown(KeyCode.A) == true && towerPlaceScript.placed == true && cash >= playerTowerAttack.GetComponent<TowerAttack>().cost && paused == false)
         {
             towerPlaceScript.towerToPlace = playerTowerAttack;
             StartCoroutine(towerPlaceScript.Placing());
         }
 
-        if (Input.GetKeyDown(KeyCode.S) == true && towerPlaceScript.placed == true && cash >= playerTowerSlow.GetComponent<TowerSlow>().cost)
+        if (Input.GetKeyDown(KeyCode.S) == true && towerPlaceScript.placed == true && cash >= playerTowerSlow.GetComponent<TowerSlow>().cost && paused == false)
         {
             towerPlaceScript.towerToPlace = playerTowerSlow;
             StartCoroutine(towerPlaceScript.Placing());
         }
 
-        if (Input.GetKeyDown(KeyCode.D) == true && towerPlaceScript.placed == true)
+        if (Input.GetKeyDown(KeyCode.D) == true && towerPlaceScript.placed == true && paused == false)
         {
             StartCoroutine(towerPlaceScript.Demolish());
         }
@@ -56,10 +66,11 @@ public class HqManager : MonoBehaviour
     {
         if (other.CompareTag("Enemy"))
         {
-            //streth goal - maybe play an explosion when enemy hits the hq
+            //stretch goal - maybe play an explosion when enemy hits the hq
             Destroy(other.gameObject);
             startNode.enemyCount--;
             health--;
+            healthTracker.text = "HQ HP: " + health;
 
             if (health <= 0)
             {
@@ -68,7 +79,7 @@ public class HqManager : MonoBehaviour
         }
         else if (other.CompareTag("Boss"))
         {
-            StartCoroutine(other.GetComponent<BossScript>().BossAttack());
+            other.GetComponent<BossScript>().InitBossAttack();
         }
     }
 
@@ -77,7 +88,11 @@ public class HqManager : MonoBehaviour
     /// </summary>
     public void GameOver()
     {
+        healthTracker.text = "GAME OVER";
+        healthTracker.color = new Color(1f, 0f, 0f, 1f);
         startNode.stopRunning = true;
+        StopAllCoroutines();
+        Time.timeScale = 0;
     }
 
     /// <summary>
@@ -85,11 +100,50 @@ public class HqManager : MonoBehaviour
     /// </summary>
     IEnumerator Accrue()
     {
+        yield return new WaitForSeconds(1f);
         while (startNode.stopRunning == false)
         {
-            cash += 5;
-            //Debug.Log("cash: " + cash); //log to ui
+            //hard cap on cash just in case
+            if (cash < 900)
+            {
+                cash += 5;
+            }
+
+            cashTracker.text = "Cash Money: $" + cash; //reach goal - gotta update the cash text in the other scripts that alter it too
             yield return new WaitForSeconds(1f);
         }
+    }
+
+    /// <summary>
+    /// Return to the title.
+    /// </summary>
+    public void BackToTitle()
+    {
+        //just in case the player goes back if they paused
+        if (Time.timeScale == 0)
+        {
+            Time.timeScale = 1;
+        }
+
+        SceneManager.LoadScene("TitleScreen");
+    }
+
+    /// <summary>
+    /// Toggle pause state of game.
+    /// </summary>
+    public void TogglePauseGame() //stretch goal - check to make sure all systems are truly paused, as of now they seem to be fine
+    {
+        paused = !paused;
+
+        if (paused == true && startNode.stopRunning == false)
+        {
+            pauseButtonText.text = "Resume";
+        }
+        else if (paused == false && startNode.stopRunning == false)
+        {
+            pauseButtonText.text = "Pause";
+        }
+
+        Time.timeScale = (!paused).GetHashCode();
     }
 }

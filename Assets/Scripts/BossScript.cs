@@ -22,14 +22,22 @@ public class BossScript : EnemyScript
     }
 
     /// <summary>
+    /// Initiate the boss attack coroutine.
+    /// </summary>
+    public void InitBossAttack()
+    {
+        StartCoroutine(BossAttack());
+    }
+
+    /// <summary>
     /// Initiate boss's final endless attack against the base. Continues until boss is destroyed.
     /// </summary>
     public IEnumerator BossAttack()
     {
-        while (startNodeSpawnScript.stopRunning == false)
+        while (startNodeSpawnScript.stopRunning == false && gameObject != null)
         {
-            endNode.health--; //do an explosion anim too each time
-
+            endNode.health--; //reach goal - do an explosion anim too each time
+            endNode.healthTracker.text = "HQ HP: " + endNode.health;
             if (endNode.health <= 0)
             {
                 endNode.GameOver();
@@ -37,5 +45,10 @@ public class BossScript : EnemyScript
 
             yield return new WaitForSeconds(1.25f);
         }
+    }
+
+    public override void OnDestroy()
+    {
+        StopCoroutine(BossAttack());
     }
 }

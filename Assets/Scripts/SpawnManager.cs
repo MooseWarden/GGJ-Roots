@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 /// <summary>
 /// Controls enemy spawn;
@@ -16,12 +17,16 @@ public class SpawnManager : MonoBehaviour
     [HideInInspector] public bool stopRunning = false; //if need to pause too? pause can lift from rwi
 
     private bool startAgain = false;
+    private TextMeshProUGUI waveTracker;
 
     // Start is called before the first frame update
     void Start()
     {
+        waveTracker = GameObject.Find("Wave Tracker").GetComponent<TextMeshProUGUI>();
+        waveTracker.text = "Wave Number: " + waveNumber;
+
         //start the initial wave
-        StartCoroutine(WaveIntroAnim());
+        //StartCoroutine(WaveIntroAnim()); //reach goal
         if (enemyPrefabs != null && bossPrefab != null)
         {
             StartCoroutine(Spawner(waveNumber));
@@ -29,7 +34,7 @@ public class SpawnManager : MonoBehaviour
         else
         {
             //Debug.Log("win!");
-            //set an auto win condition here if the enemy and boss prefabs arent filled
+            //reach goal - set an auto win condition here if the enemy and boss prefabs arent filled
         }
     }
 
@@ -54,9 +59,9 @@ public class SpawnManager : MonoBehaviour
 
         if (startAgain == true && enemyCount == 0 && stopRunning == false)
         {
-            StartCoroutine(WaveClearAnim()); //plays first cuz the first time this will be called is after the first wave is cleared
+            //StartCoroutine(WaveClearAnim()); //reach goal - plays first cuz the first time this will be called is after the first wave is cleared
             waveNumber++;
-            StartCoroutine(WaveIntroAnim());
+            //StartCoroutine(WaveIntroAnim()); //reach goal
             StartCoroutine(Spawner(waveNumber));
             startAgain = false;
         }
@@ -88,6 +93,8 @@ public class SpawnManager : MonoBehaviour
     IEnumerator Spawner(int numToSpawn)
     {
         //replace this with the intro anim, whose number changes based on the wave. maybe have that coroutine call this one. or have the intro anim here. or first call the intro anim, then the spawner
+        waveTracker.text = "Wave Number: " + waveNumber;
+
         yield return new WaitForSeconds(2);
 
         //make this into a higher number later
@@ -100,6 +107,11 @@ public class SpawnManager : MonoBehaviour
 
         for (int i = 0; i < numToSpawn; i++)
         {
+            if (stopRunning == true)
+            {
+                break;
+            }
+
             int randEnemyIndex = Random.Range(0, enemyPrefabs.Length);
             GameObject instantEnemy = Instantiate(enemyPrefabs[randEnemyIndex], SpawnPosition(), enemyPrefabs[randEnemyIndex].transform.rotation); //maybe play spawn anim like the ball from rwi
             //use instantEnemy to activate the spawn anim

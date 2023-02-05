@@ -42,12 +42,21 @@ public class EnemyScript : MonoBehaviour
     {
         if (startNodeSpawnScript.stopRunning == false)
         {
-            transform.position = Vector3.MoveTowards(transform.position, targetNode.transform.position, Time.deltaTime * speed);
+            transform.position = Vector3.MoveTowards(transform.position, TargetPosition(), Time.deltaTime * speed);
         }
         else
         {
             //reach goal - play the enemy win anim if we have time to implement, they just jump up and down wherever they are on the field, or just confetti shoots out from them
         }
+    }
+
+    /// <summary>
+    /// Set the target position of the enemy.
+    /// </summary>
+    public Vector3 TargetPosition()
+    {
+        Vector3 spawnPos = new(targetNode.transform.position.x, 0.3f, targetNode.transform.position.z);
+        return spawnPos;
     }
 
     /// <summary>
@@ -79,12 +88,20 @@ public class EnemyScript : MonoBehaviour
     }
 
     /// <summary>
-    /// Destroy the enemy and decrement number of enemies.
+    /// Destroy the enemy and reward the player.
     /// </summary>
-    private IEnumerator Die()
+    private IEnumerator Die() //does this even need to be an enumerator
     {
-        yield return new WaitForSeconds(0f);
+        yield return null;
         startNodeSpawnScript.enemyCount--;
+        HqManager payUp = GameObject.Find("End Node").GetComponent<HqManager>();
+        payUp.cash += payout;
+        payUp.cashTracker.text = "Cash Money: $" + payUp.cash;
         Destroy(gameObject);
+    }
+
+    public virtual void OnDestroy()
+    {
+        StopAllCoroutines(); //just in case, fix coroutine logic later
     }
 }
