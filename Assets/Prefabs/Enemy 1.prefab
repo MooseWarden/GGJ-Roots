@@ -128,7 +128,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 5
-  health: 5
+  dmgRate: 0.5
+  health: 4
+  payout: 5
   startNodeNodeScript: {fileID: 0}
   targetNode: {fileID: 0}
   startNodeSpawnScript: {fileID: 0}
+  takeDmg: 0
+  dmgMultiplier: 1

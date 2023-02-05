@@ -2,6 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Controls enemy spawn;
+/// </summary>
 public class SpawnManager : MonoBehaviour
 {
     //populate these in the editor
@@ -25,7 +28,7 @@ public class SpawnManager : MonoBehaviour
         }
         else
         {
-            Debug.Log("win!");
+            //Debug.Log("win!");
             //set an auto win condition here if the enemy and boss prefabs arent filled
         }
     }
@@ -39,13 +42,18 @@ public class SpawnManager : MonoBehaviour
 
     /// <summary>
     /// Keep track of when to spawn another wave.
-    /// Paused until the spawner is done, all the boss enemies are dead, and the game isnt paused.
+    /// Paused until the spawner is done, all the nonboss enemies are dead, and the game isnt paused.
     /// </summary>
     void Check()
     {
+        //bandaid in cases where tower and enemy scripts overcompensate and deduct from enemycount too much every now and then
+        if (enemyCount < 0)
+        {
+            enemyCount = 0;
+        }
+
         if (startAgain == true && enemyCount == 0 && stopRunning == false)
         {
-            Debug.Log("checked and succeeded");
             StartCoroutine(WaveClearAnim()); //plays first cuz the first time this will be called is after the first wave is cleared
             waveNumber++;
             StartCoroutine(WaveIntroAnim());
@@ -57,7 +65,6 @@ public class SpawnManager : MonoBehaviour
     /// <summary>
     /// Set the spawn position of the enemy.
     /// </summary>
-    /// <returns></returns>
     public Vector3 SpawnPosition()
     {
         Vector3 spawnPos = new(gameObject.transform.position.x, 0.6f, gameObject.transform.position.z);
@@ -67,11 +74,10 @@ public class SpawnManager : MonoBehaviour
     /// <summary>
     /// Play the intro animation.
     /// </summary>
-    /// <returns></returns>
     IEnumerator WaveIntroAnim()
     {
         //play the anim here of what wave number this is
-        Debug.Log("intro anim");
+        //Debug.Log("intro anim");
         yield return new WaitForSeconds(1);
     }
 
@@ -79,13 +85,12 @@ public class SpawnManager : MonoBehaviour
     /// Infinite enemy spawn routine.
     /// </summary>
     /// <param name="numToSpawn"></param>
-    /// <returns></returns>
     IEnumerator Spawner(int numToSpawn)
     {
         //replace this with the intro anim, whose number changes based on the wave. maybe have that coroutine call this one. or have the intro anim here. or first call the intro anim, then the spawner
         yield return new WaitForSeconds(2);
 
-        //make this into a specific number later, maybe some value specific to a sport. when beat boss you win
+        //make this into a higher number later
         if (numToSpawn % 5 == 0)
         {
             GameObject instantEnemy = Instantiate(bossPrefab, SpawnPosition(), bossPrefab.transform.rotation);
@@ -98,7 +103,7 @@ public class SpawnManager : MonoBehaviour
             int randEnemyIndex = Random.Range(0, enemyPrefabs.Length);
             GameObject instantEnemy = Instantiate(enemyPrefabs[randEnemyIndex], SpawnPosition(), enemyPrefabs[randEnemyIndex].transform.rotation); //maybe play spawn anim like the ball from rwi
             //use instantEnemy to activate the spawn anim
-            enemyCount++; 
+            enemyCount++;
             yield return new WaitForSeconds(Random.Range(0.5f, 1.5f));
         }
 
@@ -110,11 +115,10 @@ public class SpawnManager : MonoBehaviour
     /// <summary>
     /// Play the wave cleared animation.
     /// </summary>
-    /// <returns></returns>
     IEnumerator WaveClearAnim()
     {
         //play the anim here
-        Debug.Log("clear anim");
+        //Debug.Log("clear anim");
         yield return new WaitForSeconds(1);
     }
 }

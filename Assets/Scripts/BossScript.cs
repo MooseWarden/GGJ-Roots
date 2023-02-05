@@ -1,31 +1,29 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Base boss behaviors.
+/// </summary>
 public class BossScript : EnemyScript
 {
     private HqManager endNode;
 
     // Start is called before the first frame update
-    void Start()
+    public override void Start()
     {
-        startNodeNodeScript = GameObject.Find("Start Node").GetComponent<NodePointers>();
-        targetNode = startNodeNodeScript.nextNodes[Random.Range(0, startNodeNodeScript.nextNodes.Length)];
-        startNodeSpawnScript = GameObject.Find("Start Node").GetComponent<SpawnManager>();
-
+        base.Start();
         endNode = GameObject.Find("End Node").GetComponent<HqManager>();
     }
 
     // Update is called once per frame
-    void Update()
+    public override void Update()
     {
-        NodeWalk();
+        base.Update();
     }
 
     /// <summary>
     /// Initiate boss's final endless attack against the base. Continues until boss is destroyed.
     /// </summary>
-    /// <returns></returns>
     public IEnumerator BossAttack()
     {
         while (startNodeSpawnScript.stopRunning == false)

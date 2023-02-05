@@ -1,7 +1,11 @@
 using UnityEngine;
 
+/// <summary>
+/// Slows down enemies based on what category they are.
+/// </summary>
 public class TowerSlow : TowerScript
 {
+    //these stack, no need for a multiplier value
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Enemy"))

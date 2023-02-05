@@ -1,5 +1,8 @@
 using UnityEngine;
 
+/// <summary>
+/// Store the next node on path and direct enemies.
+/// </summary>
 public class NodePointers : MonoBehaviour
 {
     //store the potential next nodes here in editor
@@ -7,6 +10,7 @@ public class NodePointers : MonoBehaviour
 
     private void Start()
     {
+        //hide all the walk nodes on play
         if (gameObject.name != "Start Node")
         {
             GetComponent<MeshRenderer>().enabled = false;
