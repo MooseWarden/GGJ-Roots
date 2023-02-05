@@ -5,7 +5,7 @@ using UnityEngine;
 /// </summary>
 public class TowerAttack : TowerScript
 {
-    //might need to make an object to simulate the towers throwing shit at the enemy? or just some generic pulse when enemies are in range?
+    //reach goal - might need to make an object to simulate the towers throwing shit at the enemy? or just some generic pulse when enemies are in range?
 
     //If the enemy isnt taking dmg, start the gethurt coroutine, otherwise add onto the multiplier.
     private void OnTriggerEnter(Collider other)
@@ -68,11 +68,25 @@ public class TowerAttack : TowerScript
             {
                 other.GetComponent<EnemyScript>().takeDmg = false;
                 other.GetComponent<EnemyScript>().dmgMultiplier--;
+
+                //bandaid for the issue where occationally, the multiplier goes to the negatives (i think havent verified) and the enemy starts gaining health
+                //usually happens when the enemy exits a tower cluster and shortly enters another one, weird combo of slow and attack towers maybe
+                if(other.GetComponent<EnemyScript>().dmgMultiplier < 1)
+                {
+                    other.GetComponent<EnemyScript>().dmgMultiplier = 1;
+                }
             }
             else if (other.CompareTag("Boss"))
             {
                 other.GetComponent<BossScript>().takeDmg = false;
                 other.GetComponent<BossScript>().dmgMultiplier--;
+
+                //bandaid for the issue where occationally, the multiplier goes to the negatives (i think havent verified) and the enemy starts gaining health
+                //usually happens when the enemy exits a tower cluster and shortly enters another one, weird combo of slow and attack towers maybe
+                if (other.GetComponent<BossScript>().dmgMultiplier < 1)
+                {
+                    other.GetComponent<BossScript>().dmgMultiplier = 1;
+                }
             }
         }
     }

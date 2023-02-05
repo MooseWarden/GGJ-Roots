@@ -46,7 +46,7 @@ public class EnemyScript : MonoBehaviour
         }
         else
         {
-            //play the enemy win anim if we have time to implement, they just jump up and down wherever they are on the field, or just confetti shoots out from them
+            //reach goal - play the enemy win anim if we have time to implement, they just jump up and down wherever they are on the field, or just confetti shoots out from them
         }
     }
 
@@ -61,7 +61,7 @@ public class EnemyScript : MonoBehaviour
 
             if (health <= 0)
             {
-                if (gameObject != null)
+                if (gameObject != null) //The object of type 'EnemyScript' has been destroyed but you are still trying to access it. - this sometimes still happens, dunno why
                 {
                     StopAllCoroutines();
                     StartCoroutine(Die());
